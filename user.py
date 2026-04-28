@@ -19,6 +19,7 @@ class UserSystem:
         data = self.load_users()
         for user in data["users"]:
             if user["username"] == username:
+                print(data["users"])
                 return "Username already exists"
         data["users"].append({
             "username": username,
@@ -34,7 +35,3 @@ class UserSystem:
                 self.user_current = username
                 return f"Welcome {self.user_current}"
         return "Username or Password incorrect"
-def main():
-    system = UserSystem()
-    print(system.register("Loc", "2612"))
-main()
