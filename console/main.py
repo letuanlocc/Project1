@@ -1,6 +1,11 @@
-from user import UserSystem
-from manage_money import manage_money
+from logic.logic_user import UserSystem
+from console.mainTypeMoney import manage_money
+from logic.logic_utils import JsonStorage
+
+storage = JsonStorage()
+
 def user():
+    data = storage.load()
     system = UserSystem() 
     while True:
         print("1. Register")
@@ -10,11 +15,13 @@ def user():
         if choose == "1":
             name = input("Nhập Username: ")
             password = input("Nhập Password: ")
-            print(system.register(name, password))
+            print(system.register(name, password,data))
+            storage.save(data)
         elif choose == "2":
             name = input("Nhập Username: ")
             password = input("Nhập Password: ")
-            print(system.login(name, password))
+            print(system.login(name, password,data))
+            storage.save(data)
         else:
             return
         if system.user_current is None:
