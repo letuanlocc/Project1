@@ -10,15 +10,13 @@ def manage_money(system):
     handle = handle_type()
     for user in data["users"]:
         if user["username"] == system.user_current:
-            user.setdefault("transactions", [])
-            user.setdefault("data_day", [])
             if user["transactions"]:
                 return data_day(system) 
             else:
                 while True:
                     print(f"Welcome {system.user_current} to demo mange monney ")
-                    print("1. Save money")
-                    print("2. Comfortable")
+                    print("1. Thrifty spending")
+                    print("2. Comfortable spending")
                     print("3. Exit")
                     choose = input("Nhập lựa chọn: ")
                     if choose == "1":

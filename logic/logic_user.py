@@ -3,7 +3,6 @@ import os
 from logic.logic_utils import JsonStorage, clear
 
 class UserSystem:
-    
     def __init__(self):
         self.user_current = None
         
@@ -15,7 +14,9 @@ class UserSystem:
                 return "Username already exists"
         data["users"].append({
             "username": username,
-            "password": password
+            "password": password,
+            "transactions": [],
+            "data_day": []
         })
         return "Register success"
     
