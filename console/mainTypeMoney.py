@@ -25,7 +25,10 @@ def manage_money(system):
                         handle.save_type("save_money",total,day,system.user_current,data)
                         storage.save(data)
                     elif choose == "2":
-                        pass
+                        total = int(input("Total money: "))
+                        day = int(input("Day: "))
+                        handle.comfor_type("comfor",total,day,system.user_current,data)
+                        storage.save(data)
                     else:
                         return
                     choose_out = input("Do you want continue (Y/N): ")

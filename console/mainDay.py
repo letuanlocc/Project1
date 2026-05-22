@@ -13,24 +13,25 @@ def data_day(system):
         print("5. Exit")
         choose = input("Nhập lựa chọn: ")
         if choose == "1":
-            for user in data["users"]:
-                if user["username"] == system.user_current:
-                    day = len(user["data_day"]) + 1
-                    eat = int(input("eat: "))
-                    play = int(input("play: "))
-                    gas = int(input("gas: "))
-                    print(handle.add_day(eat,play,gas,day,data,system.user_current))
+            eat = int(input("eat: "))
+            play = int(input("play: "))
+            gas = int(input("gas: "))
+            print(handle.add_day(eat,play,gas,data,system.user_current))
             storage.save(data)
         elif choose == "2":
             day = int(input("Input day want to update: "))
-            found = any(d["day"] == day for user in data["users"] for d in user["data_day"])
+            found = any(d["day"] == day 
+                        for user in data["users"] 
+                        if user["username"] == system.user_current
+                        for d in user["data_day"])
             if not found:
                 print("Day not exits")
             else:
                 eat = int(input("eat: "))
                 play = int(input("play: "))
                 gas = int(input("gas: "))
-                print(handle.update_day(eat, play, gas, day, data))
+                print(handle.update_day(eat, play, gas, day, data,system.user_current))
+            storage.save(data)
         elif choose == "3":
             handle.view_day(data,system.user_current)
         elif choose == "4":

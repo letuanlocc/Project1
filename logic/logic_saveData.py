@@ -3,7 +3,7 @@
 def format_money(money):
     return f"{money:,.0f}".replace(",", ".") + " VND"
 
-def save_money_rule(total,day):
+def rule(total,day):
     rule = {"eat": 0.7, "play": 0.1, "gas": 0.2}
     total_eat = total * rule["eat"]
     total_play = total * rule["play"]
@@ -20,8 +20,8 @@ class handle_type:
         if type_manage == "save_money":
             for user in data["users"]:
                 if user["username"] == user_current:
-                    total_eat, total_play, total_gas, rule = save_money_rule(total_money,total_day)
-                    user["ratio"] = rule
+                    total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
+                    user["ratio"] = ratio
                     if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
                         user["transactions"].append({
                             "typpe": "Save Money",
@@ -35,8 +35,25 @@ class handle_type:
                             "target_gas": (total_gas) / total_day
                     }) 
                     self.show_info(data,user_current)
-        else:
-            pass
+    def comfor_type(self,type_manage, total_money, total_day, user_current,data):
+            if type_manage == "comfor":
+                for user in data["users"]:
+                    if user["username"] == user_current:
+                        total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
+                        user["ratio"] = ratio
+                        if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
+                            user["transactions"].append({
+                                "typpe": "Save Money",
+                                "total" : total_money,
+                                "day": total_day,
+                                "total_eat": (total_eat),
+                                "total_play": (total_play),
+                                "total_gas": (total_gas),
+                                "target_eat": (total_eat) / total_day,
+                                "target_play": (total_play) / total_day,
+                                "target_gas": (total_gas) / total_day
+                        }) 
+                        self.show_info(data,user_current)
     
     def show_info(self,data,user_current):
         for user in data["users"]:
