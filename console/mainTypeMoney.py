@@ -27,7 +27,7 @@ def manage_money(system):
                     elif choose == "2":
                         total = int(input("Total money: "))
                         day = int(input("Day: "))
-                        handle.comfor_type("comfor",total,day,system.user_current,data)
+                        handle.comfor_type("comfortable",total,day,system.user_current,data)
                         storage.save(data)
                     else:
                         return

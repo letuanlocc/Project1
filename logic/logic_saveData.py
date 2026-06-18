@@ -24,7 +24,7 @@ class handle_type:
                     user["ratio"] = ratio
                     if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
                         user["transactions"].append({
-                            "typpe": "Save Money",
+                            "typpe": "save_money",
                             "total" : total_money,
                             "day": total_day,
                             "total_eat": (total_eat),
@@ -36,14 +36,14 @@ class handle_type:
                     }) 
                     self.show_info(data,user_current)
     def comfor_type(self,type_manage, total_money, total_day, user_current,data):
-            if type_manage == "comfor":
+            if type_manage in ("comfor", "comfortable"):
                 for user in data["users"]:
                     if user["username"] == user_current:
                         total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
                         user["ratio"] = ratio
                         if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
                             user["transactions"].append({
-                                "typpe": "Save Money",
+                                "typpe": "comfortable",
                                 "total" : total_money,
                                 "day": total_day,
                                 "total_eat": (total_eat),
