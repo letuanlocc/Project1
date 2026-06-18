@@ -17,7 +17,8 @@ def manage_money(system):
                     print(f"Welcome {system.user_current} to demo mange monney ")
                     print("1. Thrifty spending")
                     print("2. Comfortable spending")
-                    print("3. Exit")
+                    print("3. Discipline spending")
+                    print("4. Exit")
                     choose = input("Nhập lựa chọn: ")
                     if choose == "1":
                         total = int(input("Total money: "))
@@ -28,6 +29,11 @@ def manage_money(system):
                         total = int(input("Total money: "))
                         day = int(input("Day: "))
                         handle.comfor_type("comfortable",total,day,system.user_current,data)
+                        storage.save(data)
+                    elif choose == "3":
+                        total = int(input("Total money: "))
+                        day = int(input("Day: "))
+                        handle.discipline_type("discipline",total,day,system.user_current,data)
                         storage.save(data)
                     else:
                         return

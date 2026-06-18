@@ -38,8 +38,15 @@ def data_day(system):
             conti = input("Do you want Delete ??????(Y/N): ")
             if conti == "y":
                 day = int(input("Input day want to delete: "))
-                print(handle.delete_day(day,data,system.user_current))
-            storage.save(data)
+                found = any(d["day"] == day 
+                            for user in data["users"] 
+                            if user["username"] == system.user_current
+                            for d in user["data_day"])
+                if not found:
+                    print("Day not exists")
+                else:
+                    print(handle.delete_day(day,data,system.user_current))
+                    storage.save(data)
         else:
             return
         choose_out = input("Do you want continue(Y/N): ")
