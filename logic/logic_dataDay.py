@@ -141,20 +141,16 @@ def evaluate_discipline(data, user_current):
             budget_eat = trans["total_eat"]
             budget_play = trans["total_play"]
             budget_gas = trans["total_gas"]
-            
             total_spent_eat = sum(d["eat"] for d in user["data_day"])
             total_spent_play = sum(d["play"] for d in user["data_day"])
             total_spent_gas = sum(d["gas"] for d in user["data_day"])
-            
             # Tính tổng budget và chi tiêu
             total_budget = budget_eat + budget_play + budget_gas
             total_spent = total_spent_eat + total_spent_play + total_spent_gas
-            
             # Tính độ lệch cho mỗi ngày
             day_deviations = []
             days_within_budget = 0
             days_over_budget = 0
-            
             for day_data in user["data_day"]:
                 day_total = day_data["eat"] + day_data["play"] + day_data["gas"]
                 daily_target = (budget_eat + budget_play + budget_gas) / trans["day"]
@@ -165,19 +161,16 @@ def evaluate_discipline(data, user_current):
                     "spent": day_total,
                     "target": daily_target,
                     "deviation": deviation
-                })
-                
+                })    
                 if deviation <= 0:
                     days_within_budget += 1
                 else:
                     days_over_budget += 1
-            
             # Tính streak dài nhất (vượt/trong ngân sách)
             max_over_streak = 0
             max_within_streak = 0
             current_over_streak = 0
             current_within_streak = 0
-            
             for dev in day_deviations:
                 if dev["deviation"] > 0:
                     current_over_streak += 1
@@ -187,20 +180,17 @@ def evaluate_discipline(data, user_current):
                     current_within_streak += 1
                     current_over_streak = 0
                     max_within_streak = max(max_within_streak, current_within_streak)
-            
             # Top 3 ngày overspend nhiều nhất
             sorted_deviations = sorted([d for d in day_deviations if d["deviation"] > 0], 
                                       key=lambda x: x["deviation"], reverse=True)[:3]
-            
             # Tính điểm kỷ luật (0-100)
             if total_budget > 0:
                 budget_adherence = max(0, 100 * (1 - total_spent / total_budget))
             else:
-                budget_adherence = 100
+                budget_adherence = 100  
             
             consistency_score = (days_within_budget / len(user["data_day"]) * 100) if user["data_day"] else 0
             discipline_score = (budget_adherence * 0.6 + consistency_score * 0.4)
-            
             # Đánh giá mức độ
             if discipline_score >= 80:
                 rating = "Excellent"

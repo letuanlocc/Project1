@@ -3,11 +3,15 @@
 def format_money(money):
     return f"{money:,.0f}".replace(",", ".") + " VND"
 
-def rule(total,day):
+def rule(total, day):
+    if total <= 0:
+        raise ValueError("Total money must be greater than 0.")
+    if day <= 0:
+        raise ValueError("Total days must be greater than 0.")
     rule = {"eat": 0.7, "play": 0.1, "gas": 0.2}
     total_eat = total * rule["eat"]
     total_play = total * rule["play"]
-    total_gas = total * rule["gas"]    
+    total_gas = total * rule["gas"]
     return total_eat, total_play, total_gas, rule
 
 def cft_money_rule():
@@ -22,18 +26,20 @@ class handle_type:
                 if user["username"] == user_current:
                     total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
                     user["ratio"] = ratio
-                    if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
+                    if not user["transactions"]:
                         user["transactions"].append({
                             "typpe": "save_money",
                             "total" : total_money,
                             "day": total_day,
-                            "total_eat": (total_eat),
-                            "total_play": (total_play),
-                            "total_gas": (total_gas),
-                            "target_eat": (total_eat) / total_day,
-                            "target_play": (total_play) / total_day,
-                            "target_gas": (total_gas) / total_day
-                    }) 
+                            "total_eat": total_eat,
+                            "total_play": total_play,
+                            "total_gas": total_gas,
+                            "target_eat": total_eat / total_day,
+                            "target_play": total_play / total_day,
+                            "target_gas": total_gas / total_day
+                        })
+                    else:
+                        print("There is already an active transaction. Cannot create a new spending plan.")
                     self.show_info(data,user_current)
     def comfor_type(self,type_manage, total_money, total_day, user_current,data):
             if type_manage in ("comfor", "comfortable"):
@@ -41,38 +47,42 @@ class handle_type:
                     if user["username"] == user_current:
                         total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
                         user["ratio"] = ratio
-                        if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
+                        if not user["transactions"]:
                             user["transactions"].append({
                                 "typpe": "comfortable",
                                 "total" : total_money,
                                 "day": total_day,
-                                "total_eat": (total_eat),
-                                "total_play": (total_play),
-                                "total_gas": (total_gas),
-                                "target_eat": (total_eat) / total_day,
-                                "target_play": (total_play) / total_day,
-                                "target_gas": (total_gas) / total_day
-                        }) 
-                        self.show_info(data,user_current)
+                                "total_eat": total_eat,
+                                "total_play": total_play,
+                                "total_gas": total_gas,
+                                "target_eat": total_eat / total_day,
+                                "target_play": total_play / total_day,
+                                "target_gas": total_gas / total_day
+                            })
+                        else:
+                            print("There is already an active transaction. Cannot create a new spending plan.")
+                    self.show_info(data,user_current)
     def discipline_type(self,type_manage, total_money, total_day, user_current,data):
             if type_manage in ("discipline", "strict"):
                 for user in data["users"]:
                     if user["username"] == user_current:
                         total_eat, total_play, total_gas, ratio = rule(total_money,total_day)
                         user["ratio"] = ratio
-                        if user["data_day"] == []: #kiểm tra có phải lần đầu tiên đăng nhập không
+                        if not user["transactions"]:
                             user["transactions"].append({
                                 "typpe": "discipline",
                                 "total" : total_money,
                                 "day": total_day,
-                                "total_eat": (total_eat),
-                                "total_play": (total_play),
-                                "total_gas": (total_gas),
-                                "target_eat": (total_eat) / total_day,
-                                "target_play": (total_play) / total_day,
-                                "target_gas": (total_gas) / total_day
-                        }) 
-                        self.show_info(data,user_current)
+                                "total_eat": total_eat,
+                                "total_play": total_play,
+                                "total_gas": total_gas,
+                                "target_eat": total_eat / total_day,
+                                "target_play": total_play / total_day,
+                                "target_gas": total_gas / total_day
+                            })
+                        else:
+                            print("There is already an active transaction. Cannot create a new spending plan.")
+                    self.show_info(data,user_current)
     
     def show_info(self,data,user_current):
         for user in data["users"]:
