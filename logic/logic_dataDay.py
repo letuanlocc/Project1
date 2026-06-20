@@ -103,24 +103,14 @@ def calculator_comfortable(data, user_current):
             remaining_play = max(0, trans["total_play"] - spent_play)
             remaining_gas = max(0, trans["total_gas"] - spent_gas)
 
-            carry_eat = base_eat * len(user["data_day"]) - spent_eat
-            carry_play = base_play * len(user["data_day"]) - spent_play
-            carry_gas = base_gas * len(user["data_day"]) - spent_gas
+            last_day = user["data_day"][-1]
+            carry_eat = base_eat - last_day["eat"]
+            carry_play = base_play - last_day["play"]
+            carry_gas = base_gas - last_day["gas"]
 
-            if carry_eat >= 0:
-                today_eat = max(0, base_eat + carry_eat / remaining_days)
-            else:
-                today_eat = max(0, remaining_eat / remaining_days)
-
-            if carry_play >= 0:
-                today_play = max(0, base_play + carry_play / remaining_days)
-            else:
-                today_play = max(0, remaining_play / remaining_days)
-
-            if carry_gas >= 0:
-                today_gas = max(0, base_gas + carry_gas / remaining_days)
-            else:
-                today_gas = max(0, remaining_gas / remaining_days)
+            today_eat = max(0, base_eat + carry_eat) if remaining_days > 0 else base_eat
+            today_play = max(0, base_play + carry_play) if remaining_days > 0 else base_play
+            today_gas = max(0, base_gas + carry_gas) if remaining_days > 0 else base_gas
 
             print(f"Target_eat: {format_money(remaining_eat / remaining_days)} --> Tomorrow eat:  {format_money(today_eat)}")
             print(f"Target_play: {format_money(remaining_play / remaining_days)} --> Tomorrow play: {format_money(today_play)}")
