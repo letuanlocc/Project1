@@ -6,13 +6,16 @@ class handle_day:
             if user["username"] == user_current:
                 if not user["transactions"]:
                     return "Không có kế hoạch chi tiêu"
+                trans = user["transactions"][-1]
+                remaining_days = trans["day"] - len(user["data_day"])
+                if remaining_days <= 0:
+                    return "Không thể thêm ngày mới. Kế hoạch đã đầy."
                 user["data_day"].append({
                     "day": len(user["data_day"]) + 1,
                     "eat": eat,
                     "play": play,
                     "gas": gas
                 })
-                trans = user["transactions"][-1]
                 trans_type = trans.get("typpe", "").lower().replace(" ", "_")
                 if trans_type == "save_money":
                     calculator_saveMoney(data, user_current)
@@ -96,17 +99,28 @@ def calculator_comfortable(data, user_current):
             spent_play = sum(d["play"] for d in user["data_day"])
             spent_gas = sum(d["gas"] for d in user["data_day"])
 
-            carry_eat = base_eat * len(user["data_day"]) - spent_eat
-            carry_play = base_play * len(user["data_day"]) - spent_play
-            carry_gas = base_gas * len(user["data_day"]) - spent_gas
-
             remaining_eat = max(0, trans["total_eat"] - spent_eat)
             remaining_play = max(0, trans["total_play"] - spent_play)
             remaining_gas = max(0, trans["total_gas"] - spent_gas)
 
-            today_eat = max(0, base_eat + carry_eat) if carry_eat >= 0 else max(0, remaining_eat / remaining_days)
-            today_play = max(0, base_play + carry_play) if carry_play >= 0 else max(0, remaining_play / remaining_days)
-            today_gas = max(0, base_gas + carry_gas) if carry_gas >= 0 else max(0, remaining_gas / remaining_days)
+            carry_eat = base_eat * len(user["data_day"]) - spent_eat
+            carry_play = base_play * len(user["data_day"]) - spent_play
+            carry_gas = base_gas * len(user["data_day"]) - spent_gas
+
+            if carry_eat >= 0:
+                today_eat = max(0, base_eat + carry_eat / remaining_days)
+            else:
+                today_eat = max(0, remaining_eat / remaining_days)
+
+            if carry_play >= 0:
+                today_play = max(0, base_play + carry_play / remaining_days)
+            else:
+                today_play = max(0, remaining_play / remaining_days)
+
+            if carry_gas >= 0:
+                today_gas = max(0, base_gas + carry_gas / remaining_days)
+            else:
+                today_gas = max(0, remaining_gas / remaining_days)
 
             print(f"Target_eat: {format_money(remaining_eat / remaining_days)} --> Tomorrow eat:  {format_money(today_eat)}")
             print(f"Target_play: {format_money(remaining_play / remaining_days)} --> Tomorrow play: {format_money(today_play)}")
